@@ -1,4 +1,9 @@
 <!-- templates/home.html -->
 {% extends "base.html" %} {% block content %}
 <h1>Homepage</h1>
+<ul>
+  {% for andmed in osauhinguandmed_list %}
+  <li>{{ andmed.nimi }}</li>
+  {% endfor %}
+</ul>
 {% endblock content %}
