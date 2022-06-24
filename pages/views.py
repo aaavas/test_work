@@ -1,12 +1,39 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.generic import TemplateView, ListView
-from pages.models import OsauhinguAndmed
+from pages.forms import OsauhinguAndmedForm
+from pages.models import OsauhinguAndmedModel
+from django.db.models import Q
+from django.views.decorators.http import require_http_methods
+
 
 # Create your views here.
 class HomePageView(ListView):
-    model = OsauhinguAndmed
+    model = OsauhinguAndmedModel
     template_name = "avaleht.html"
 
 
 class AboutPageView(TemplateView):
     template_name = "about.html"
+
+
+class SearchResultsView(ListView):
+    model = OsauhinguAndmedModel
+    template_name: str = "search.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        return OsauhinguAndmedModel.objects.filter(
+            Q(nimi__icontains=query) | Q(registrikood__icontains=query)
+        )
+
+
+def FormPageView(request):
+    context = {}
+    form = OsauhinguAndmedForm(request.POST or None)
+    if form.is_valid():
+        # save the form data to model
+        form.save()
+        return redirect(reverse("home"))
+    context["form"] = form
+    return render(request, "form.html", context)

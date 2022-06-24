@@ -1,12 +1,14 @@
 from django.test import TestCase
 from django.urls import reverse
-from .models import OsauhinguAndmed
+from .models import OsauhinguAndmedModel
 
 # Create your tests here.
 class OsauhinguAndmedTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.OAandmed = OsauhinguAndmed.objects.create(nimi="Test", registrikood=1001005)
+        cls.OAandmed = OsauhinguAndmedModel.objects.create(
+            nimi="Test", registrikood=1001005
+        )
 
     def test_model_content(self):
         self.assertEqual(self.OAandmed.nimi, "Test")
