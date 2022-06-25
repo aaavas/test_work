@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block content %}
+<h1>Search results</h1>
+<ul>
+  {% for andmed in object_list %}
+  <li>
+    <a href="{% url 'profile' registrikood=andmed.registrikood%}"
+      ><p>Osaühingu nimi: {{ andmed.nimi }}</p></a
+    >
+    <p>Osaühingu registrikood: {{andmed.registrikood}}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}

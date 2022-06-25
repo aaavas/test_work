@@ -1,0 +1,17 @@
+{% extends "base.html" %} {% block content %}
+<title>Avaleht</title>
+<h1>Avaleht</h1>
+<form action="{% url 'search_results' %}" method="get">
+  <input name="q" type="text" placeholder="Otsi..." />
+</form>
+<ul>
+  {% for andmed in osauhinguandmedmodel_list %}
+  <li>
+    <a href="{% url 'profile' registrikood=andmed.registrikood%}"
+      ><p>Osaühing: {{ andmed.nimi }}</p></a
+    >
+    <p>Registrikood: {{andmed.registrikood}}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock content %}
