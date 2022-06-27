@@ -1,0 +1,37 @@
+body {
+    background-color: #F1FAEE; 
+    padding-top: 100px;
+}
+
+.search {
+    padding-left: 60px;
+    
+}
+
+a:link, a:visited {
+    color: #1D3557; 
+    text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  width: 80%;
+}
+
+
+.selective {
+    color: #1D3557; 
+    padding: 1px 1px 1px 1px; 
+    border: 1px solid transparent;
+    padding-left: 20px;
+}
+
+.selectedLink:hover {
+    color: #1D3557;
+}
+
+li:hover, .selective:hover {
+    background-color: #A8DADC;
+    color: #1D3557; 
+    border: 1px solid #1D3557;
+}
