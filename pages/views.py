@@ -2,9 +2,8 @@ from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
-from pages import admin
 from pages.forms import OsauhinguAndmedForm
-from pages.models import Osalus, OsauhinguAndmedModel, OsanikModel
+from pages.models import Osalus, OsauhinguAndmedModel
 from django.db.models import Q
 
 
@@ -25,7 +24,10 @@ class SearchResultsView(ListView):
     def get_queryset(self):
         query = self.request.GET.get("q")
         return OsauhinguAndmedModel.objects.filter(
-            Q(nimi__icontains=query) | Q(registrikood__icontains=query)
+            Q(nimi__icontains=query)
+            | Q(registrikood__icontains=query)
+            | Q(osanikud__nimi__icontains=query)
+            | Q(osanikud__kood__icontains=query)
         )
 
 
@@ -40,27 +42,19 @@ def form_page_view(request):
     if request.method == "POST":
         form = OsauhinguAndmedForm(request.POST)
         formset = osalusFormset(request.POST)
-        print("Validating..")
-        print(form.is_valid(), form.errors)
-        print(formset.is_valid(), formset.errors)
-
         if form.is_valid() and formset.is_valid():
             sum_segments = 0
-            print("Formset: ", formset)
             for segment_form in formset:
-                print("Segment: ", segment_form.cleaned_data)
                 if segment_form.cleaned_data["osaluse_suurus"]:
                     cleaned_segment = segment_form.cleaned_data["osaluse_suurus"]
                     sum_segments += int(cleaned_segment)
             kapital = int(form.cleaned_data["kapital"])
-            print(kapital, sum_segments)
             if kapital == sum_segments:
                 ou_instance = form.save()
                 osalused = formset.save(commit=False)
-                print(osalused)
                 for osalus in osalused:
                     osalus.company = ou_instance
-                    o = osalus.save()
+                    osalus.save()
                 return redirect("profile", registrikood=ou_instance.registrikood)
     form = OsauhinguAndmedForm()
     formset = osalusFormset()

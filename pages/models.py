@@ -1,10 +1,7 @@
 from datetime import date
-from tkinter import CASCADE
-from wsgiref import validate
 from django.db import models
 from django.forms import ValidationError
-import re, django
-from django_project import settings
+import re
 
 # Create your models here.
 
