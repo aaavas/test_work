@@ -1,12 +1,11 @@
-from django.http import HttpResponse
+from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView
-from django.views.generic.base import RedirectView
+from pages import admin
 from pages.forms import OsauhinguAndmedForm
-from pages.models import OsauhinguAndmedModel
+from pages.models import Osalus, OsauhinguAndmedModel, OsanikModel
 from django.db.models import Q
-from django.views.decorators.http import require_http_methods
 
 
 # Create your views here.
@@ -32,12 +31,33 @@ class SearchResultsView(ListView):
 
 def form_page_view(request):
     context = {}
-    form = OsauhinguAndmedForm(request.POST or None)
-    if form.is_valid():
-        # save the form data to model
-        form.save()
-        return redirect(reverse("home"))
-    context["form"] = form
+    osalusFormset = inlineformset_factory(
+        OsauhinguAndmedModel,
+        Osalus,
+        fields=("person", "osaluse_suurus", "asutaja"),
+        extra=1,
+    )
+    if request.method == "POST":
+        form = OsauhinguAndmedForm(request.POST)
+        formset = osalusFormset(request.POST)
+        if form.is_valid() and formset.is_valid():
+            sum_segments = 0
+            for segment_form in formset:
+                if segment_form.cleaned_data["osaluse_suurus"]:
+                    cleaned_segment = segment_form.cleaned_data["osaluse_suurus"]
+                    sum_segments += int(cleaned_segment)
+            kapital = int(form.cleaned_data["kapital"])
+            if kapital == sum_segments:
+                ou_instance = form.save()
+                osalused = formset.save(commit=False)
+                for osalus in osalused:
+                    osalus.company = ou_instance
+                    o = osalus.save()
+                    print(o)
+                return redirect("profile", registrikood=ou_instance.registrikood)
+    form = OsauhinguAndmedForm()
+    formset = osalusFormset()
+    context["form"], context["formset"] = form, formset
     return render(request, "form.html", context)
 
 

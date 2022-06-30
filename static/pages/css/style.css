@@ -3,6 +3,10 @@ body {
     padding-top: 100px;
 }
 
+.full_length {
+    width: 100%;
+}
+
 .search {
     padding-left: 60px;
     
@@ -34,4 +38,16 @@ li:hover, .selective:hover {
     background-color: #A8DADC;
     color: #1D3557; 
     border: 1px solid #1D3557;
+}
+
+.right {
+    position: fixed;
+    right: 100px;
+    top: 120px;
+    width: 10%;
+}
+
+textarea {
+    height: 20px;
+    width: 180px;
 }
