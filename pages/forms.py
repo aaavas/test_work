@@ -1,6 +1,5 @@
 from django import forms
-from .models import OsanikModel, OsauhinguAndmedModel
-from functools import partial
+from .models import OsauhinguAndmedModel
 
 
 class OsauhinguAndmedForm(forms.ModelForm):
