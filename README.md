@@ -33,4 +33,15 @@ Seejärel mine lehele ```http://127.0.0.1:8000/```, et rakendust kasutada
 Serverist väljumiseks kasutada klahvikombinatsiooni CTRL + C
 
 
+4. Admin vaate avamiseks tuleb luua superuser õigustega kasutaja virtuaalkeskkonnas...
+
+```python manage.py createsuperuser```
+
+...käivitada server...
+
+```python manage.py runserver```
+
+...ja minna veebilehele...
+
+```http://127.0.0.1:8000/admin/```
 
