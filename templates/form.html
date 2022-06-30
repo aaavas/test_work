@@ -2,6 +2,10 @@
 <head>
   <title>Asutamisvorm</title>
   <link rel="stylesheet" href="{% static 'pages/css/style.css' %}" />
+  <script src="{% static 'pages/js/jquery-3.6.0.min.js' %}">
+      </script
+    <script src="{% static 'pages/js/my-jquery.js' %}">
+  </script>
 </head>
 <body class="content">
   <p>Asutamise kuupäev märkida formaadis AASTA-KUU-PÄEV</p>
@@ -12,36 +16,41 @@
       {{ form.as_table }}
     </table>
     {{ formset.management_form }} {% for f in formset %}
-    <div class="osalus-form">{{f.as_p}}</div>
+    <div class="osalus-form">
+      <table class="no-error">
+        {{f.as_table}}
+      </table>
+    </div>
     {%endfor%}
-    <button id="add-form" type="button">Lisa osanik</button>
+    <button id="add_more" type="button">Lisa osanik</button>
     <input type="submit" value="Salvesta" />
   </form>
 </body>
 
 <script>
-  let osalusForm = document.querySelectorAll(".osalus-form");
-  let container = document.querySelector("#form-container");
-  let addButton = document.querySelector("#add-form");
-  let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
+  $("#add_more").click(function () {
+    cloneMore("div.osalus-form:last", "osalus_set");
+  });
 
-  let formNum = osalusForm.length - 1;
-  addButton.addEventListener("click", addForm);
-
-  function addForm(e) {
-    e.preventDefault();
-
-    let newForm = osalusForm[0].cloneNode(true);
-    let formRegex = RegExp(`form-(\\d){1}-`, "g");
-
-    formNum++;
-    newForm.innerHTML = newForm.innerHTML.replace(
-      formRegex,
-      `form-${formNum}-`
-    );
-    container.insertBefore(newForm, addButton);
-
-    totalForms.setAttribute("value", `${formNum + 1}`);
+  function cloneMore(selector, type) {
+    var newElement = $(selector).clone(true);
+    var total = $("#id_" + type + "-TOTAL_FORMS").val();
+    newElement.find(":input").each(function () {
+      var name = $(this)
+        .attr("name")
+        .replace("-" + (total - 1) + "-", "-" + total + "-");
+      var id = "id_" + name;
+      $(this).attr({ name: name, id: id }).val("").removeAttr("checked");
+    });
+    newElement.find("label").each(function () {
+      var newFor = $(this)
+        .attr("for")
+        .replace("-" + (total - 1) + "-", "-" + total + "-");
+      $(this).attr("for", newFor);
+    });
+    total++;
+    $("#id_" + type + "-TOTAL_FORMS").val(total);
+    $(selector).after(newElement);
   }
 </script>
 {% endblock content %}

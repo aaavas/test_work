@@ -40,20 +40,27 @@ def form_page_view(request):
     if request.method == "POST":
         form = OsauhinguAndmedForm(request.POST)
         formset = osalusFormset(request.POST)
+        print("Validating..")
+        print(form.is_valid(), form.errors)
+        print(formset.is_valid(), formset.errors)
+
         if form.is_valid() and formset.is_valid():
             sum_segments = 0
+            print("Formset: ", formset)
             for segment_form in formset:
+                print("Segment: ", segment_form.cleaned_data)
                 if segment_form.cleaned_data["osaluse_suurus"]:
                     cleaned_segment = segment_form.cleaned_data["osaluse_suurus"]
                     sum_segments += int(cleaned_segment)
             kapital = int(form.cleaned_data["kapital"])
+            print(kapital, sum_segments)
             if kapital == sum_segments:
                 ou_instance = form.save()
                 osalused = formset.save(commit=False)
+                print(osalused)
                 for osalus in osalused:
                     osalus.company = ou_instance
                     o = osalus.save()
-                    print(o)
                 return redirect("profile", registrikood=ou_instance.registrikood)
     form = OsauhinguAndmedForm()
     formset = osalusFormset()
@@ -64,5 +71,14 @@ def form_page_view(request):
 def ou_profile_view(request, registrikood):
     context = {}
     osauhing = get_object_or_404(OsauhinguAndmedModel, registrikood=registrikood)
+    osanikud = []
+    for osanik in osauhing.osanikud.all():
+        nimi = osanik.nimi
+        kood = osanik.kood
+        osalus = osanik.osalus_set.get(company=osauhing)
+        osa_suurus = osalus.osaluse_suurus
+        asutaja = "Asutaja" if osalus.asutaja else ""
+        osanikud.append([nimi, kood, osa_suurus, asutaja])
     context["ou"] = osauhing
+    context["osanikud"] = osanikud
     return render(request, "profile.html", context)

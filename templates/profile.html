@@ -5,6 +5,14 @@
 <p>Registrikood: {{ ou.registrikood }}</p>
 <p>Asutamiskuupäev: {{ ou.asutamiskp }}</p>
 <p>Kapital: {{ ou.kapital }}</p>
-<p>Osanikud: {{ ou.osanikud }}</p>
-
-{% endblock content %}
+{% if osanikud %}
+<br />
+<p>Osanikud:</p>
+<br />
+{% for osanik in osanikud %} {% for osa in osanik %}
+<p>{{ osa }}</p>
+{% endfor %}
+<br />
+{%endfor %} {% else %}
+<p>Osanikke ei leitud</p>
+{% endif %} {% endblock content %}
