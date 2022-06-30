@@ -1,9 +1,56 @@
-{% extends "base.html" %} {% block content %}
-<form action="" method="post">
-  {% csrf_token %}
-  <table>
-    {{form.as_table }}
-  </table>
-  <input type="submit" value="Submit" />
-</form>
+{% extends "base.html" %} {% load static %} {% block content %}
+<head>
+  <title>Asutamisvorm</title>
+  <link rel="stylesheet" href="{% static 'pages/css/style.css' %}" />
+  <script src="{% static 'pages/js/jquery-3.6.0.min.js' %}">
+      </script
+    <script src="{% static 'pages/js/my-jquery.js' %}">
+  </script>
+</head>
+<body class="content">
+  <p>Asutamise kuupäev märkida formaadis AASTA-KUU-PÄEV</p>
+  <p>Näide: 21. juuni 2010 oleks 2010-06-21</p>
+  <form id="form-container" method="post">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    {{ formset.management_form }} {% for f in formset %}
+    <div class="osalus-form">
+      <table class="no-error">
+        {{f.as_table}}
+      </table>
+    </div>
+    {%endfor%}
+    <button id="add_more" type="button">Lisa osanik</button>
+    <input type="submit" value="Salvesta" />
+  </form>
+</body>
+
+<script>
+  $("#add_more").click(function () {
+    cloneMore("div.osalus-form:last", "osalus_set");
+  });
+
+  function cloneMore(selector, type) {
+    var newElement = $(selector).clone(true);
+    var total = $("#id_" + type + "-TOTAL_FORMS").val();
+    newElement.find(":input").each(function () {
+      var name = $(this)
+        .attr("name")
+        .replace("-" + (total - 1) + "-", "-" + total + "-");
+      var id = "id_" + name;
+      $(this).attr({ name: name, id: id }).val("").removeAttr("checked");
+    });
+    newElement.find("label").each(function () {
+      var newFor = $(this)
+        .attr("for")
+        .replace("-" + (total - 1) + "-", "-" + total + "-");
+      $(this).attr("for", newFor);
+    });
+    total++;
+    $("#id_" + type + "-TOTAL_FORMS").val(total);
+    $(selector).after(newElement);
+  }
+</script>
 {% endblock content %}

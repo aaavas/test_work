@@ -1,0 +1,22 @@
+/* Style the header */
+.header {
+    padding-top: 10px;
+    background: #A8DADC;
+    color: #1D3557;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+}
+
+.headerLink {
+    padding-left: 20px;
+    padding-right: 20px;
+    border: 1px solid transparent;
+}
+
+.headerLink :hover {
+    color: #457B9D;
+    border: 1px solid #457B9D;
+}

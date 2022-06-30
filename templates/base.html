@@ -1,7 +1,13 @@
-<header>
-  <a href="{% url 'home' %}">Avaleht</a> |
-  <a href="{% url 'form' %}">Osaühingu asutamise vorm</a> |
-  <a href="{% url 'about' %}">About</a>
-</header>
+{% load static %}
+<link rel="stylesheet" href="{% static 'pages/css/headerStyle.css' %}" />
+<link rel="stylesheet" href="{% static 'pages/css/style.css' %}" />
+
+<div class="header" id="baseHeader">
+  <h2>
+    <a class="headerLink" href="{% url 'home' %}">Avaleht</a>
+    <a class="headerLink" href="{% url 'form' %}">Osaühingu asutamise vorm</a>
+    <a class="headerLink" href="{% url 'about' %}">About</a>
+  </h2>
+</div>
 
 {% block content %} {% endblock content %}

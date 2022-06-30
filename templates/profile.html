@@ -3,5 +3,16 @@
 <h1>{{ou.nimi}} andmete vaade</h1>
 <p>Nimi: {{ ou.nimi }}</p>
 <p>Registrikood: {{ ou.registrikood }}</p>
-
-{% endblock content %}
+<p>Asutamiskuupäev: {{ ou.asutamiskp }}</p>
+<p>Kapital: {{ ou.kapital }}</p>
+{% if osanikud %}
+<br />
+<p>Osanikud:</p>
+<br />
+{% for osanik in osanikud %} {% for osa in osanik %}
+<p>{{ osa }}</p>
+{% endfor %}
+<br />
+{%endfor %} {% else %}
+<p>Osanikke ei leitud</p>
+{% endif %} {% endblock content %}

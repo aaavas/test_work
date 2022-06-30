@@ -1,13 +1,18 @@
 {% extends "base.html" %} {% block content %}
-<h1>Search results</h1>
-<ul>
-  {% for andmed in object_list %}
-  <li>
-    <a href="{% url 'profile' registrikood=andmed.registrikood%}"
-      ><p>Osaühingu nimi: {{ andmed.nimi }}</p></a
-    >
-    <p>Osaühingu registrikood: {{andmed.registrikood}}</p>
-  </li>
-  {% endfor %}
-</ul>
+<div class="content">
+  <h1>Search results</h1>
+  <ul>
+    {% for andmed in object_list %}
+    <li>
+      <div
+        class="selective"
+        onclick="location.href='{% url 'profile' registrikood=andmed.registrikood%}'"
+      >
+        <p class="selectedLink">Osaühing: {{ andmed.nimi }}</p>
+        <p>Registrikood: {{andmed.registrikood}}</p>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock content %}
