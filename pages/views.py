@@ -28,7 +28,7 @@ class SearchResultsView(ListView):
             | Q(registrikood__icontains=query)
             | Q(osanikud__nimi__icontains=query)
             | Q(osanikud__kood__icontains=query)
-        )
+        ).distinct()
 
 
 def form_page_view(request):
